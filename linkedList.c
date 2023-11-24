@@ -3,72 +3,81 @@
 #include <string.h>
 
 typedef struct node NodeType;
+// node struct with data and a pointer to the next node
 typedef struct node {
         char data[10];
         NodeType *next;
 } NodeType;
 
 NodeType* addNodeFront(NodeType *List, char* val){
-        NodeType *new = (NodeType *)malloc(sizeof(NodeType));
-        strcpy(new->data, val);
-        new->next=List;
+        NodeType *new = (NodeType *)malloc(sizeof(NodeType)); // allocate memory for new node
+        strcpy(new->data, val); // copy val to the data of the new node
+        new->next=List; // set head of list to next of the new node, inserting it at the front
         return new;
 }
 
 NodeType* addNodeBack(NodeType *List, char* val){
         NodeType *new = (NodeType *)malloc(sizeof(NodeType));
         strcpy(new->data, val);
-        new->next=NULL;
+        new->next=NULL; // set next of new node to null, as it will go on the end of the list
 
+        // if the list is empty
         if (List == NULL) {
                 return new;
         }
         NodeType *current=List;
+        // iterate along the list until current is at the end
         while (current->next != NULL){
                 current=current->next;
         }
-        current->next=new;
+        current->next=new; // set the last node's next to the new node
         return List;
 }
 
 NodeType* removeNodeFront(NodeType *List){
+        // if the list is empty, return null
         if (List == NULL){
                 return NULL;
         }
         NodeType *front=List;
-        List=front->next;
-        free(front);
+        List=front->next; // set the head of the list to the second element
+        free(front); // free the first node
         return List;
 }
 
 NodeType* removeNodeBack(NodeType *List){
+        // if the list is empty, return null
         if (List == NULL){
                 return NULL;
         }
         NodeType *current=List;
+        // if there is only one node in the list
         if (current->next == NULL){
                 free(current);
                 return NULL;
         }
+        // iterate along the list until current is the second last node
         while (current->next->next != NULL){
                 current=current->next;
         }
+        // free the last node
         free(current->next);
-        current->next=NULL;
+        current->next=NULL; // make the second last node point to null
         return List;
 }
 
 NodeType* addNodeAfter(NodeType *List, char* insert, char* searchString){
         NodeType *current=List;
+        // iterate along the list until the end or the search string is found
         while (current != NULL && strcmp(current->data, searchString) != 0) {
                 current=current->next;
         }
         // when the search string is found and current is not null
         if (current != NULL){
-                NodeType *new = (NodeType *)malloc(sizeof(NodeType));
-                strcpy(new->data, insert);
-                new->next=current->next;
-                current->next=new;
+                NodeType *new = (NodeType *)malloc(sizeof(NodeType)); // allocate memory for the new node
+                strcpy(new->data, insert); // put the insert value into the data of the new node
+                new->next=current->next; // new points to the next of current
+                current->next=new; // current points to new, placing new just after it
         }
         return List;
 }
@@ -98,23 +107,26 @@ NodeType* removeNode(NodeType *List, char* remove){
 
 char* getFrontText(NodeType *node){
         if (node != NULL){
-                return node->data;
+                return node->data; // return the value of the node
         } else {
                 return NULL;
         }
 }
 
 void printList(NodeType *List){
+        // empty list
         if (List == NULL){
                 printf("NULL\n");
                 return;
         }
+        // recursively print the list
         NodeType *current=List;
         printf("%s -> ", current->data);
         printList(current->next);
 }
 
 int main(void){
+        // testing
         NodeType *List;
         List=NULL;
         List = addNodeFront(List, "Hello");
@@ -147,6 +159,7 @@ int main(void){
 
         printf("%s\n", getFrontText(List));
 
+        // free the whole list
         while (List != NULL) {
                 NodeType* temp = List;
                 List = List->next;
