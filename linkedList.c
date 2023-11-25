@@ -54,7 +54,8 @@ NodeType* removeNodeBack(NodeType *List){
         // if there is only one node in the list
         if (current->next == NULL){
                 free(current);
-                return NULL;
+                List=NULL;
+                return List;
         }
         // iterate along the list until current is the second last node
         while (current->next->next != NULL){
@@ -88,7 +89,8 @@ NodeType* removeNode(NodeType *List, char* remove){
         // special case of first element is the matched string
         if (strcmp(current->data, remove) == 0){
                 free(current);
-                return NULL;
+                List=NULL;
+                return List;
         }
         NodeType *prev;
         // iterate through list until the end, or string is matched
